@@ -2,7 +2,7 @@
 
 function solveEquation(a, b, c) {
   let arr = [];
-  let d = b ** 2 - 4 * a * c;
+  const d = b ** 2 - 4 * a * c;
 
   if (a === 0) {
   	console.log('а не должно быть равно нулю');
@@ -18,9 +18,37 @@ function solveEquation(a, b, c) {
 
 
 function calculateTotalMortgage(percent, contribution, amount, date) {
-  let totalAmount;
+   if (isNumeric(percent) && percent !== 0) {
+    percent = +percent;
+  } else {
+    return `Параметр "Процентная ставка" содержит неправильное значение "${percent}"`;
+  }
 
-  // код для задачи №2 писать здесь
+  if (isNumeric(contribution)) {
+    contribution = +contribution;
+  } else {
+    return `Параметр "Начальный взнос" содержит неправильное значение "${contribution}"`;
+  }
+  
+  if (isNumeric(amount)) {
+    amount = +amount;
+  } else {
+    return `Параметр "Общая стоимость" содержит неправильное значение "${amount}"`;
+  }
 
-  return totalAmount;
+
+  const creditBody = amount - contribution;
+  const currentdate = new Date;
+  const creditPeriod = (date.getMonth() - currentdate.getMonth()) + (12 * (date.getFullYear() - currentdate.getFullYear()));
+  const monthPercent = (percent / 12) / 100;
+  const monthPayment = creditBody * (monthPercent + (monthPercent / (((1 + monthPercent) ** creditPeriod) - 1)));
+  let totalAmount = monthPayment * creditPeriod;
+
+  return Number(totalAmount.toFixed(2));
+};
+
+ function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
+
+
