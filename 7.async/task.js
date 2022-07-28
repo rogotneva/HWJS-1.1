@@ -38,11 +38,13 @@ class AlarmClock {
   }
 
   start() {
-    const checkClock = (alarm, callback) => {
-      if (alarm === this.getCurrentFormattedTime()) {
-        callback();
-      } else if (this.timerId === null) {
-        this.timerId = setInterval(this.alarmCollection.forEach(alarm => checkClock(alarm)), 1000);
+    if (!this.timerId) {
+      this.timerId = setInterval(() => this.alarmCollection.forEach(alarm => checkClock(alarm)), 1000);
+    }
+
+    function checkClock(alarm) {
+      if (alarm.time === this.getCurrentFormattedTime()) {
+        alarm.callback();
       }
     }
   }
@@ -67,8 +69,8 @@ class AlarmClock {
 
 function testCase() {
   let alarm = new AlarmClock();
-  alarm.addClock('15:11', () => console.log('Пора вставать!'), 1);
-  alarm.addClock('15:12', () => console.log('Вставай уже!'), 2);
+  alarm.addClock('11:48', () => console.log('Пора вставать!'), 1);
+  alarm.addClock('11:50', () => console.log('Вставай уже!'), 2);
   alarm.addClock('15:13', () => console.log('Солнце встало, а ты еще лежишь!'), 2);
   alarm.addClock('15:14', () => {
     console.log('Последнее преупреждение!');
